@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Core.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+
 namespace Infrastructure.Data.Config
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>

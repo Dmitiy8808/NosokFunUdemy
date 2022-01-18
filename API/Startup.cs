@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using API.Helpers;
 using API.Middleware;
 using API.Extensions;
+using StackExchange.Redis;
+
 
 namespace API
 {
@@ -22,6 +24,10 @@ namespace API
             services.AddControllers();
             services.AddEntityFrameworkNpgsql().AddDbContext<StoreContext>(opt => 
             opt.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddSingleton<IConnectionMultiplexer>(c => {
+                var configuration = ConfigurationOptions.Parse(Configuration["ConnectionStrings:Redis"], true);
+                return ConnectionMultiplexer.Connect(configuration);
+            });
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
             services.AddCors(opt => 
