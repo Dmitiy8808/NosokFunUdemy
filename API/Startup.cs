@@ -4,7 +4,8 @@ using API.Helpers;
 using API.Middleware;
 using API.Extensions;
 using StackExchange.Redis;
-
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace API
 {
@@ -24,11 +25,14 @@ namespace API
             services.AddControllers();
             services.AddEntityFrameworkNpgsql().AddDbContext<StoreContext>(opt => 
             opt.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddEntityFrameworkNpgsql().AddDbContext<AppIdentityDbContext>(opt => 
+            opt.UseNpgsql(Configuration["ConnectionStrings:IdentityConnection"]));
             services.AddSingleton<IConnectionMultiplexer>(c => {
                 var configuration = ConfigurationOptions.Parse(Configuration["ConnectionStrings:Redis"], true);
                 return ConnectionMultiplexer.Connect(configuration);
             });
             services.AddApplicationServices();
+            services.AddIdentityServices(Configuration);
             services.AddSwaggerDocumentation();
             services.AddCors(opt => 
             {
@@ -55,6 +59,8 @@ namespace API
             app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
