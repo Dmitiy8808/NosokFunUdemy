@@ -21,13 +21,13 @@ namespace Core.Entities.OrderAggregate
         }
 
         public string BuyerEmail { get; set; }
-        public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now.ToUniversalTime();
         public Address ShipToAddress { get; set; }
         public DeliveryMethod DeliveryMethod { get; set; }
         public IReadOnlyList<OrderItem> OrderItems { get; set; }
         public decimal Subtotal { get; set; }
-        public OrderStatus Status { get; set; }
-        public string PaymentIdentId { get; set; }
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
+        public string PaymentIdentId { get; set; } = "1";
         
 
         public decimal GetTotal()
